@@ -6,7 +6,7 @@ class Database
     {
         $this->db = null;
         try {
-            $this->db = new mysqli('localhost', 'root', '', 'apicruddb');
+            $this->db = new mysqli('your_hostname', 'your_username', 'your_password', 'your_dbname');
         } catch (Exception $e) {
             echo "Database could not be connected: " . $e->getMessage();
         }
