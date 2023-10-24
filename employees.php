@@ -36,9 +36,17 @@ class Employee
         $this->email = htmlspecialchars(strip_tags($this->email));
         $this->designation = htmlspecialchars(strip_tags($this->designation));
         $this->created = htmlspecialchars(strip_tags($this->created));
-        $sqlQuery = "INSERT INTO " . $this->db_table . " SET name = '" . $this->name . "', email = '" . $this->email . "', designation = '" . $this->designation . "',created = '" . $this->created . "'";
-        $this->db->query($sqlQuery);
-        if ($this->db->affected_rows > 0) {
+        $sqlQuery = "INSERT INTO " . $this->db_table . " (name, email, designation, created) 
+                 VALUES (:name, :email, :designation, :created)";
+
+        $stmt = $this->db->prepare($sqlQuery);
+        $stmt->bindParam(':name', $this->name, PDO::PARAM_STR);
+        $stmt->bindParam(':email', $this->email, PDO::PARAM_STR);
+        $stmt->bindParam(':designation', $this->designation, PDO::PARAM_STR);
+        $stmt->bindParam(':created', $this->created, PDO::PARAM_STR);
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
             return true;
         }
         return false;
@@ -49,7 +57,7 @@ class Employee
     {
         $sqlQuery = "SELECT id, name, email, designation, created FROM " . $this->db_table . " WHERE id = " . $this->id;
         $record = $this->db->query($sqlQuery);
-        $dataRow = $record->fetch_assoc();
+        $dataRow = $record->fetch(PDO::FETCH_ASSOC);
         $this->name = $dataRow['name'];
         $this->email = $dataRow['email'];
         $this->designation = $dataRow['designation'];
@@ -65,10 +73,19 @@ class Employee
         $this->created = htmlspecialchars(strip_tags($this->created));
         $this->id = htmlspecialchars(strip_tags($this->id));
 
-        $sqlQuery = "UPDATE " . $this->db_table . " SET name = '" . $this->name . "', email = '" . $this->email . "', designation = '" . $this->designation . "',created = '" . $this->created . "' WHERE id = " . $this->id;
+        $sqlQuery = "UPDATE " . $this->db_table . " 
+                 SET name = :name, email = :email, designation = :designation, created = :created 
+                 WHERE id = :id";
 
-        $this->db->query($sqlQuery);
-        if ($this->db->affected_rows > 0) {
+        $stmt = $this->db->prepare($sqlQuery);
+        $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
+        $stmt->bindParam(':name', $this->name, PDO::PARAM_STR);
+        $stmt->bindParam(':email', $this->email, PDO::PARAM_STR);
+        $stmt->bindParam(':designation', $this->designation, PDO::PARAM_STR);
+        $stmt->bindParam(':created', $this->created, PDO::PARAM_STR);
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
             return true;
         }
         return false;
@@ -77,9 +94,12 @@ class Employee
     // DELETE
     function deleteEmployee()
     {
-        $sqlQuery = "DELETE FROM " . $this->db_table . " WHERE id = " . $this->id;
-        $this->db->query($sqlQuery);
-        if ($this->db->affected_rows > 0) {
+        $sqlQuery = "DELETE FROM " . $this->db_table . " WHERE id = :id";
+        $stmt = $this->db->prepare($sqlQuery);
+        $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
             return true;
         }
         return false;

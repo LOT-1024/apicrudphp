@@ -8,13 +8,13 @@ $database = new Database();
 $db = $database->getConnection();
 $items = new Employee($db);
 $records = $items->getEmployees();
-$itemCount = $records->num_rows;
+$itemCount = $records->rowCount();
 echo json_encode($itemCount);
 if ($itemCount > 0) {
     $employeeArr = array();
     $employeeArr["body"] = array();
     $employeeArr["itemCount"] = $itemCount;
-    while ($row = $records->fetch_assoc()) {
+    while ($row = $records->fetch(PDO::FETCH_ASSOC)) {
         array_push($employeeArr["body"], $row);
     }
     echo json_encode($employeeArr);
