@@ -1,3 +1,5 @@
 https://www.youtube.com/watch?v=TcNFNG3TtIE
 
+https://fahmidasclassroom.com/create-simple-rest-api-crud-with-php-and-mysql/
+
 http://localhost/myapp/random//apicrudphp/api/read.php
