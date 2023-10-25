@@ -11,9 +11,9 @@ $db = $database->getConnection();
 $item = new Employee($db);
 $item->id = isset($_GET['id']) ? $_GET['id'] : die();
 $item->getSingleEmployee();
-if ($item->name != null) {
 
-    // create array
+if ($item->name != null) {
+    // Create an array for the employee details
     $emp_arr = array(
         "id" => $item->id,
         "name" => $item->name,
@@ -22,9 +22,29 @@ if ($item->name != null) {
         "created" => $item->created
     );
 
+    // Create a response array
+    $response = array(
+        "status" => "success",
+        "message" => "Employee retrieved successfully",
+        "data" => $emp_arr
+    );
+
+    // Set the HTTP response code to 200 (OK)
     http_response_code(200);
-    echo json_encode($emp_arr);
+
+    // Send the response as JSON
+    echo json_encode($response);
 } else {
+    // If the employee is not found, set the HTTP response code to 404 (Not Found)
     http_response_code(404);
-    echo json_encode("Employee not found.");
+
+    // Create a response array for the error
+    $response = array(
+        "status" => "error",
+        "message" => "Employee not found",
+        "data" => null
+    );
+
+    // Send the response as JSON
+    echo json_encode($response);
 }

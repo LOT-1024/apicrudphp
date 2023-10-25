@@ -4,23 +4,42 @@ header("Content-Type: application/json; charset=UTF-8");
 include_once '../database.php';
 include_once '../employees.php';
 $database = new Database();
-
 $db = $database->getConnection();
 $items = new Employee($db);
 $records = $items->getEmployees();
 $itemCount = $records->num_rows;
-echo json_encode($itemCount);
+
 if ($itemCount > 0) {
     $employeeArr = array();
     $employeeArr["body"] = array();
-    $employeeArr["itemCount"] = $itemCount;
+
     while ($row = $records->fetch_assoc()) {
-        array_push($employeeArr["body"], $row);
+        $employeeArr["body"][] = $row;
     }
-    echo json_encode($employeeArr);
-} else {
-    http_response_code(404);
-    echo json_encode(
-        array("message" => "No record found.")
+
+    // Create a response array
+    $response = array(
+        "status" => "success",
+        "message" => "Data retrieved successfully",
+        "data" => $employeeArr
     );
+
+    // Set the HTTP response code to 200 (OK)
+    http_response_code(200);
+
+    // Send the response as JSON
+    echo json_encode($response);
+} else {
+    // If no records were found, set the HTTP response code to 404 (Not Found)
+    http_response_code(404);
+
+    // Create a response array
+    $response = array(
+        "status" => "error",
+        "message" => "No records found",
+        "data" => null
+    );
+
+    // Send the response as JSON
+    echo json_encode($response);
 }

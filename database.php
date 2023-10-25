@@ -6,7 +6,7 @@ class Database
     {
         $this->db = null;
         try {
-            $this->db = new mysqli('your_hostname', 'your_username', 'your_password', 'your_dbname');
+            $this->db = new mysqli('your_db_host', 'your_db_username', 'your_db_password', 'you_db_name');
         } catch (Exception $e) {
             echo "Database could not be connected: " . $e->getMessage();
         }

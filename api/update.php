@@ -17,8 +17,29 @@ $item->name = $_GET['name'];
 $item->email = $_GET['email'];
 $item->designation = $_GET['designation'];
 $item->created = date('Y-m-d H:i:s');
+
 if ($item->updateEmployee()) {
-    echo json_encode("Employee data updated.");
+    // Create a response array for success
+    $response = array(
+        "status" => "success",
+        "message" => "Employee data updated"
+    );
+
+    // Set the HTTP response code to 200 (OK)
+    http_response_code(200);
+
+    // Send the response as JSON
+    echo json_encode($response);
 } else {
-    echo json_encode("Data could not be updated");
+    // Create a response array for error
+    $response = array(
+        "status" => "error",
+        "message" => "Data could not be updated"
+    );
+
+    // Set the HTTP response code to 400 (Bad Request) or another appropriate error code
+    http_response_code(400);
+
+    // Send the response as JSON
+    echo json_encode($response);
 }

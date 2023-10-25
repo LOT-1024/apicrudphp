@@ -10,13 +10,33 @@ $database = new Database();
 $db = $database->getConnection();
 $item = new Employee($db);
 
-
 $item->name = $_GET['name'];
 $item->email = $_GET['email'];
 $item->designation = $_GET['designation'];
 $item->created = date('Y-m-d H:i:s');
+
 if ($item->createEmployee()) {
-    echo 'Employee created successfully.';
+    // Create a response array for success
+    $response = array(
+        "status" => "success",
+        "message" => "Employee created successfully"
+    );
+
+    // Set the HTTP response code to 201 (Created)
+    http_response_code(201);
+
+    // Send the response as JSON
+    echo json_encode($response);
 } else {
-    echo 'Employee could not be created.';
+    // Create a response array for error
+    $response = array(
+        "status" => "error",
+        "message" => "Employee could not be created"
+    );
+
+    // Set the HTTP response code to 400 (Bad Request) or another appropriate error code
+    http_response_code(400);
+
+    // Send the response as JSON
+    echo json_encode($response);
 }

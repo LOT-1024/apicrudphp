@@ -15,7 +15,27 @@ $item = new Employee($db);
 $item->id = isset($_GET['id']) ? $_GET['id'] : die();
 
 if ($item->deleteEmployee()) {
-    echo json_encode("Employee deleted.");
+    // Create a response array for success
+    $response = array(
+        "status" => "success",
+        "message" => "Employee deleted"
+    );
+
+    // Set the HTTP response code to 200 (OK)
+    http_response_code(200);
+
+    // Send the response as JSON
+    echo json_encode($response);
 } else {
-    echo json_encode("Data could not be deleted");
+    // Create a response array for error
+    $response = array(
+        "status" => "error",
+        "message" => "Data could not be deleted"
+    );
+
+    // Set the HTTP response code to 400 (Bad Request) or another appropriate error code
+    http_response_code(400);
+
+    // Send the response as JSON
+    echo json_encode($response);
 }
